@@ -1,0 +1,41 @@
+{
+  "framework": "langgraph",
+  "blueprint_name": "email_resolver",
+  "architecture_file_path": "https://github.com/deepmodel-ai/dm-blue-print/blob/main/email_resolver/architecture/graph.py",
+  "description": "A multi-agent system that schedules meetings based on availability and preferences.",
+  "overview": "The 'email_resolver' blueprint is designed to automate meeting scheduling by combining calendar access, AI scheduling, and notifications. It begins with the `calendar_fetcher`, which retrieves the user's availability. Then, the `scheduler` selects optimal meeting times. Finally, the `notifier` sends out meeting confirmations or alerts. This setup reduces manual scheduling effort and ensures efficient time management.",
+  "secrets": [
+    {
+      "key": "OPENAI_API_KEY",
+      "description": "Used by agents to access GPT models",
+      "required": true
+    },
+    {
+      "key": "GOOGLE_CALENDAR_TOKEN",
+      "description": "Token to access the user's calendar for scheduling",
+      "required": false
+    }
+  ],
+  "agents": [
+    {
+      "name": "calendar_fetcher",
+      "description": "Fetches user availability from calendar."
+    },
+    {
+      "name": "scheduler",
+      "description": "Suggests best meeting times based on availability."
+    },
+    {
+      "name": "notifier",
+      "description": "Sends notifications once the meeting is scheduled."
+    }
+  ],
+  "graph": {
+    "edges": [
+      { "from": "start", "to": "calendar_fetcher" },
+      { "from": "calendar_fetcher", "to": "scheduler" },
+      { "from": "scheduler", "to": "notifier" },
+      { "from": "notifier", "to": "end" }
+    ]
+  }
+}
